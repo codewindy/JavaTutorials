@@ -32,3 +32,4 @@ target/
 Thumbs.db
 #.gradle ignore
 .gradle/
+*.class

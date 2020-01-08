@@ -1,37 +1,24 @@
-package com.codewindy.mongodb.controller;/*
-package com.jkwindy.demo.controller;
+package com.codewindy.mongodb.controller;
 
-import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
-import com.jkwindy.demo.pojo.ApiResponseJson;
-import com.jkwindy.demo.pojo.User;
-import com.jkwindy.demo.service.UserService;
-import com.jkwindy.demo.utils.ValidatorUtils;
+
+import com.codewindy.mongodb.pojo.ApiResponseJson;
+import com.codewindy.mongodb.pojo.User;
+import com.codewindy.mongodb.service.UserService;
+import com.codewindy.mongodb.utils.ValidatorUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-//import org.redisson.api.RBucket;
-import org.redisson.api.RedissonClient;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.io.File;
 import java.util.*;
 
 @RestController
@@ -43,11 +30,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
+/*    @Autowired
     private JavaMailSender javaMailSender;
 
-    @Autowired
-    private RedissonClient redissonClient;
+   @Autowired
+   private RedissonClient redissonClient;*/
 
     @ApiOperation(value = "查询用户信息", notes = "查询用户信息", response = ApiResponseJson.class)
     @GetMapping(value = "/getUser/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -67,14 +54,14 @@ public class UserController {
         user.setSex("male");
         user.setAge(25);
         user.setBirthday(new Date());
-        user.setBirthdayStr(new Date().getTime() + "");
+        user.setBirthdayStr(DateUtil.currentSeconds()+ "");
         User user2 = new User();
         user2.setId(UUID.randomUUID().toString().replace("-", ""));
         user2.setSex("female");
         user2.setName("rose");
         user2.setAge(22);
         user2.setBirthday(new Date());
-        user2.setBirthdayStr(new Date().getTime() + "");
+        user2.setBirthdayStr(DateUtil.currentSeconds() + "");
         logger.info("user2==={}", user2);
 
         //RBucket<Object> rBucket = redissonClient.getBucket("foo");
@@ -100,8 +87,8 @@ public class UserController {
         apiJson.setError("校验失败");
         return apiJson;
     }
+}
 
-    */
 /**
      * 保存接口做参数校验
      *

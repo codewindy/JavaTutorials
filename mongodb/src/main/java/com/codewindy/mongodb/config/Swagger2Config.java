@@ -24,7 +24,7 @@ public class Swagger2Config {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.jkwindy.demo.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.codewindy.mongodb"))
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -33,7 +33,7 @@ public class Swagger2Config {
         return new ApiInfoBuilder()
                 .title("swagger-bootstrap-ui RESTful APIs")
                 .description("swagger-bootstrap-ui")
-                .termsOfServiceUrl("http://localhost:9090/")
+                .termsOfServiceUrl("http://localhost:8080/")
                 .contact(new Contact("jkwindy","codewindy.github.io","jkwindy@126.com"))
                 .version("1.0")
                 .build();

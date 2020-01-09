@@ -1,7 +1,7 @@
 buildscript {
     ext {
         springBootVersion = '2.2.2.RELEASE'
-        //springCloudVersion=xxx
+        springCloudVersion='Hoxton.RELEASE'
     }
     repositories {
         maven { url 'https://maven.aliyun.com/repository/public/' }
@@ -20,6 +20,8 @@ allprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'org.springframework.boot'
 
+    //set global submodule jar version
+    version = 1.0
     //set global jdk version
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -35,6 +37,13 @@ allprojects {
         //remove default logger
         all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
+    dependencyManagement {
+        imports {
+            //https://blog.csdn.net/weixin_42338555/article/details/82895232
+            //spring bom helps us to declare dependencies without specifying version numbers.
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
 }
 subprojects {
     jar {
@@ -45,6 +54,10 @@ subprojects {
     bootJar {
         baseName = 'codewindy-javatutorials.' + project.name
     }
+//import local libs jar
+//    dependencies {
+//        compile fileTree(dir: 'libs', include: ['*.jar'])
+//    }
     dependencies {
         //import log4j2
         compile group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.1.0.Final'
@@ -58,8 +71,4 @@ subprojects {
         compile group: 'com.github.xiaoymin', name: 'swagger-bootstrap-ui', version: '1.9.6'
 
     }
-    //import local libs jar
 }
-
-group 'com.codewindy'
-version '1.0-SNAPSHOT'

@@ -1,10 +1,10 @@
 package com.codewindy.mongodb.utils;
 
+import cn.hutool.core.util.IdUtil;
+import org.apache.commons.lang3.RandomStringUtils;
+
 import java.net.URLDecoder;
 import java.util.Map;
-
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 
 /**
  * aes测试
@@ -103,7 +103,6 @@ public class TestAES {
 		System.out.println("公钥:" + params.get("publicKey"));
 		System.out.println("私钥:" + params.get("privateKey"));
 		System.out.println("modulus:" + modulus);
-
 		// resultKey进行RSA加密
 //		String key = "3799578391123917";
 		String key = RandomStringUtils.randomNumeric(16);

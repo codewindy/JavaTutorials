@@ -1,5 +1,7 @@
 package com.codewindy.mongodb.utils;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
@@ -10,10 +12,13 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
+import java.util.HashMap;
+
 /**
  * @author codewindy
  * @date 2020-01-14 8:59 PM
  * @since 1.0.0
+ * https://www.bookstack.cn/read/hutool/093507f34fe0715d.md
  */
 public class TestAESByHutool {
     public static void main(String[] args) {
@@ -48,6 +53,22 @@ public class TestAESByHutool {
         byte[] signedContent = sign.sign(content.getBytes());
         System.err.println("对原始数据进行签名signedContent = " + signedContent);
 
+
+        // 模拟获取request对象里面的parameters
+        String urlPath = "/admin/queryUserInfo";
+        String httpMethod = "POST";
+        long clientTimeStamp = DateUtil.currentSeconds();
+        HashMap<String, Object> requestParams = MapUtil.newHashMap();
+        requestParams.put("urlPath", urlPath);
+        requestParams.put("httpMethod", httpMethod);
+//        requestParams.put("clientSign", request.getClientSign());
+        requestParams.put("clientTimeStamp", clientTimeStamp + "");
+        String sign2String = MapUtil.sortJoin(MapUtil.sort(requestParams), "&", "=", true);
+
+        String calculateSign = SecureUtil.hmacSha1(aesKey.getBytes()).digestHex(sign2String);
+//        calculateSign计算出来的sign和request 请求里面的参数clientSign进行比较，如果不一致说明数据被篡改了s
+
+        System.out.println("计算出来的sign和request 请求里面的参数clientSign 进行比较 = " + calculateSign);
         System.out.println("解密-----------------------------------------------------");
         //6. 使用私钥解密后的key
 

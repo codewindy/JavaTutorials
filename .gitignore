@@ -33,3 +33,4 @@ Thumbs.db
 #.gradle ignore
 .gradle/
 *.class
+mongodb/build/*

@@ -64,7 +64,7 @@ public class MikrotikServiceImpl implements MikrotikService {
             con = initApiConnection("admin", "");
             // log in to router
             con.execute(" /ip/pool/print");
-            List<Map<String, String>> addPool = con.execute(" /ip/pool/add name=pool1 ranges=10.10.10.2-10.10.20.1");
+            con.execute(" /ip/pool/add name=pool1 ranges=10.10.10.2-10.10.20.1");
             con.execute("/ppp/profile/add name=pppoe_10M remote-address=pool1");
             con.execute("/ppp/secret/add name=0327 password=0327Test service=pppoe profile=pppoe_10M");
             con.execute("/interface/pppoe-server/server/add authentication=pap service-name=PPPoE_Server interface=ether1 one-session-per-host=yes default-profile=pppoe_10M");
@@ -73,7 +73,7 @@ public class MikrotikServiceImpl implements MikrotikService {
             String command4capFileName = "/tool/sniffer/set file-name=%s.cap filter-mac-protocol=pppoe memory-limit=1000KiB";
             con.execute(String.format(command4capFileName, DateUtil.today()));
             log.info("开始执行抓包pppoe-session==={}", String.format(command4capFileName, DateUtil.today()));
-            List<Map<String, String>> execute = con.execute("/tool/sniffer/start mac-protocol=pppoe interface=ether1 direction=any");
+            List<Map<String, String>> execute = con.execute("/tool/sniffer/start mac-protocol=pppoe interface=ether1 direction=rx");
             return new ApiResponseJson("初始化pppoe服务器成功!");
         } catch (MikrotikApiException e) {
             log.info("登录RouterOS失败 = {}", e.getMessage());

@@ -33,8 +33,8 @@ public class MikroTikController {
         return mikrotikService.createPPPOEServer(ipPoolRange);
     }
 
-    @PostMapping("/downloadPPPOESession")
-    public ApiResponseJson downloadPPPOESession(@RequestParam("pcapFileName")String pcapFileName){
-        return mikrotikService.downloadPPPOESession(pcapFileName);
+    @GetMapping("/getPcapFileDetail")
+    public ApiResponseJson getPcapFileDetail(){
+        return mikrotikService.getPcapFileDetail();
     }
 }

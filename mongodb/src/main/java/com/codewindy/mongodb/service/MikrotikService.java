@@ -8,5 +8,5 @@ public interface MikrotikService {
 
     ApiResponseJson createPPPOEServer(String ipPoolRange);
 
-    ApiResponseJson downloadPPPOESession(String pcapFileName);
+    ApiResponseJson getPcapFileDetail();
 }

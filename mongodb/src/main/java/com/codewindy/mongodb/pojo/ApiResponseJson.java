@@ -22,6 +22,12 @@ public class ApiResponseJson implements Serializable {
 		this.data = null;
 	}
 
+	public ApiResponseJson(Object data) {
+		this.success = true;
+		this.error = null;
+		this.errorCode = ErrorEnum.SUCCESS.getKey();
+		this.data = data;
+	}
 	public ApiResponseJson(boolean success, String error, int errCode, Object data) {
 		super();
 		this.success = true;

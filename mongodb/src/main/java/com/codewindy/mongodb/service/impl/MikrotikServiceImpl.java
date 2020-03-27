@@ -7,6 +7,10 @@ import me.legrange.mikrotik.ApiConnection;
 import me.legrange.mikrotik.MikrotikApiException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 /**
  * @author codewindy
  * @date 2020-03-25 9:44 PM
@@ -26,52 +30,69 @@ public class MikrotikServiceImpl implements MikrotikService {
         ApiConnection con = null;
         // connect to router
         try {
-            con = ApiConnection.connect("192.168.88.1");
+            con = ApiConnection.connect("192.168.2.2");
             con.setTimeout(5000);
             // set command timeout to 5 seconds
             con.login(username,password);
             // log in to router
-            con.execute("/system resource print");
+            List<Map<String, String>> execute = con.execute("/ip/address/print");
             // execute a command
             con.close();
             // disconnect from router
-            return new ApiResponseJson();
+            return new ApiResponseJson(execute);
+
         } catch (MikrotikApiException e) {
-            e.printStackTrace();
             log.info("登录RouterOS失败 = {}",e.getMessage());
+            return new ApiResponseJson(e.getMessage());
         }
-        return new ApiResponseJson();
     }
 
     @Override
     public ApiResponseJson createPPPOEServer(String ipPoolRange) {
-        /**
-         * /ip pool
-         * add name=pool1 ranges=10.16.0.2-10.16.0.254
-         * /ip address
-         * add address=192.168.199.22/24 comment=defconf interface=ether1 network=192.168.199.0
-         * add address=192.168.199.122/24 interface=ether1 network=192.168.199.0
-         * /ip cloud
-         * set update-time=no
-         * /ip dhcp-client
-         * add dhcp-options=hostname,clientid disabled=no interface=ether1
-         * /ip dns
-         * set allow-remote-requests=yes servers=192.168.199.1
-         * /ip firewall nat
-         * add action=masquerade chain=srcnat out-interface-list=WAN
-         * /ip route
-         * add disabled=yes distance=1 gateway=192.168.199.1
-         * [admin@fsm] > ppp export
-         * # may/02/2019 15:45:52 by RouterOS 6.44.2
-         * # software id = ZJ3M-ESHW
-         *
-         * /ppp profile
-         * add dns-server=223.5.5.5 local-address=10.16.0.1 name=8M remote-address=pool1
-         */
+       /*/ip ipsec proposal
+        set [ find default=yes ] enc-algorithms=aes-128-cbc
+                /ip pool
+        add name=pool1 ranges=10.0.0.1-10.0.4.1
+                /ip address
+        add address=192.168.2.2/24 interface=wan network=192.168.2.0
+                /ip cloud
+        set update-time=no
+                /ip firewall nat
+        add action=masquerade chain=srcnat
+                /ip ipsec policy
+        set 0 dst-address=0.0.0.0/0 src-address=0.0.0.0/0
+                /ip route
+        add distance=1 gateway=192.168.2.1
+                /ip service
+        set www port=100
+        set winbox port=4569
+        */
+
         return null;
     }
 
     @Override
+    public ApiResponseJson getPcapFileDetail() {
+        ApiConnection con = null;
+        // connect to router
+        try {
+            con = ApiConnection.connect("192.168.2.2");
+            con.setTimeout(5000);
+            // set command timeout to 5 seconds
+            con.login("admin","");
+            // log in to router
+            List<Map<String, String>> resultMapList = con.execute("/file/print");
+            List<String> content = resultMapList.stream().filter(s-> s.get("type").contains(".cap")).map(s -> s.get("contents")).collect(Collectors.toList());
+            // execute a command
+            con.close();
+            // disconnect from router
+            return new ApiResponseJson(content);
+        } catch (MikrotikApiException e) {
+            log.info("获取PPPOESession详情失败 = {}",e.getMessage());
+            return new ApiResponseJson(e.getMessage());
+        }
+    }
+
     public ApiResponseJson downloadPPPOESession(String pcapFileName) {
         //下载Packet Sniffer下载创建的pcap文件
         return null;

@@ -30,7 +30,7 @@ public class UploadController {
     @GetMapping("/")
     public String index() {
 
-        return "upload";
+        return "index.html";
     }
 
     @PostMapping("/upload") //

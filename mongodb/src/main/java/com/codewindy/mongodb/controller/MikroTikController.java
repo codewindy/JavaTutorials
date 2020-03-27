@@ -3,6 +3,8 @@ package com.codewindy.mongodb.controller;
 import com.codewindy.mongodb.pojo.ApiResponseJson;
 import com.codewindy.mongodb.service.MikrotikService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.legrange.mikrotik.ApiConnection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +25,22 @@ public class MikroTikController {
     private MikrotikService mikrotikService;
 
     @GetMapping("/login")
-    public ApiResponseJson login(@RequestParam("username")String username,@RequestParam("password")String password){
+    @ApiOperation(value = "登录pppoe服务器", tags = {"登录pppoe服务器"}, notes = "登录pppoe服务器")
+    public ApiResponseJson login(@ApiParam(name = "username", value = "用户名", required = true) @RequestParam("username") String username,
+                                 @ApiParam(name = "password", value = "密码", required = true) @RequestParam("password") String password) {
 
-        return mikrotikService.login(username,password);
+        return mikrotikService.login(username, password);
     }
 
     @PostMapping("/createPPPOEServer")
-    public ApiResponseJson createPPPOEServer(@RequestParam("ipPoolRange")String ipPoolRange){
+    @ApiOperation(value = "创建pppoe服务器", tags = {"创建pppoe服务器"}, notes = "创建pppoe服务器")
+    public ApiResponseJson createPPPOEServer(@RequestParam("ipPoolRange") String ipPoolRange) {
         return mikrotikService.createPPPOEServer(ipPoolRange);
     }
 
     @GetMapping("/getPcapFileDetail")
-    public ApiResponseJson getPcapFileDetail(){
+    @ApiOperation(value = "解析pcap数据包恢复账号密码", tags = {"解析pcap数据包恢复账号密码"}, notes = "解析pcap数据包恢复账号密码")
+    public ApiResponseJson getPcapFileDetail() {
         return mikrotikService.getPcapFileDetail();
     }
 }

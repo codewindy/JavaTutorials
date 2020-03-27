@@ -1,14 +1,22 @@
 package com.codewindy.mongodb.service.impl;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.codewindy.mongodb.pojo.ApiResponseJson;
+import com.codewindy.mongodb.pojo.PppoeDetail;
 import com.codewindy.mongodb.service.MikrotikService;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import me.legrange.mikrotik.ApiConnection;
 import me.legrange.mikrotik.MikrotikApiException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -20,7 +28,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MikrotikServiceImpl implements MikrotikService {
     /**
-     *
      * @param username
      * @param password
      * @return
@@ -30,10 +37,7 @@ public class MikrotikServiceImpl implements MikrotikService {
         ApiConnection con = null;
         // connect to router
         try {
-            con = ApiConnection.connect("192.168.2.2");
-            con.setTimeout(5000);
-            // set command timeout to 5 seconds
-            con.login(username,password);
+            con = initApiConnection(username, password);
             // log in to router
             List<Map<String, String>> execute = con.execute("/ip/address/print");
             // execute a command
@@ -42,33 +46,48 @@ public class MikrotikServiceImpl implements MikrotikService {
             return new ApiResponseJson(execute);
 
         } catch (MikrotikApiException e) {
-            log.info("登录RouterOS失败 = {}",e.getMessage());
+            log.info("登录RouterOS失败 = {}", e.getMessage());
             return new ApiResponseJson(e.getMessage());
         }
     }
 
+    /*
+    /ip pool add name=pppoe_pool1 ranges=10.10.10.2-10.10.10.254
+    /ppp profile add name=pppoe_profile local-address=10.10.10.1 remote-address=pppoe_pool1
+    /interface pppoe-server server add authentication=pap service-name=PPPoE_Server interface=wan one-session-per-host=yes default-profile=pppoe_profile
+       */
     @Override
     public ApiResponseJson createPPPOEServer(String ipPoolRange) {
-       /*/ip ipsec proposal
-        set [ find default=yes ] enc-algorithms=aes-128-cbc
-                /ip pool
-        add name=pool1 ranges=10.0.0.1-10.0.4.1
-                /ip address
-        add address=192.168.2.2/24 interface=wan network=192.168.2.0
-                /ip cloud
-        set update-time=no
-                /ip firewall nat
-        add action=masquerade chain=srcnat
-                /ip ipsec policy
-        set 0 dst-address=0.0.0.0/0 src-address=0.0.0.0/0
-                /ip route
-        add distance=1 gateway=192.168.2.1
-                /ip service
-        set www port=100
-        set winbox port=4569
-        */
+        ApiConnection con = null;
+        // connect to router
+        try {
+            con = initApiConnection("admin", "");
+            // log in to router
+            con.execute(" /ip/pool/print");
+            List<Map<String, String>> addPool = con.execute(" /ip/pool/add name=pool1 ranges=10.10.10.2-10.10.20.1");
+            con.execute("/ppp/profile/add name=pppoe_10M remote-address=pool1");
+            con.execute("/ppp/secret/add name=0327 password=0327Test service=pppoe profile=pppoe_10M");
+            con.execute("/interface/pppoe-server/server/add authentication=pap service-name=PPPoE_Server interface=ether1 one-session-per-host=yes default-profile=pppoe_10M");
+            con.execute("/interface/pppoe-server/server/enable numbers=0");
+            //开始执行抓包pppoe-session
+            String command4capFileName = "/tool/sniffer/set file-name=%s.cap filter-mac-protocol=pppoe memory-limit=1000KiB";
+            con.execute(String.format(command4capFileName, DateUtil.today()));
+            log.info("开始执行抓包pppoe-session==={}", String.format(command4capFileName, DateUtil.today()));
+            List<Map<String, String>> execute = con.execute("/tool/sniffer/start mac-protocol=pppoe interface=ether1 direction=any");
+            return new ApiResponseJson("初始化pppoe服务器成功!");
+        } catch (MikrotikApiException e) {
+            log.info("登录RouterOS失败 = {}", e.getMessage());
+            return new ApiResponseJson(e.getMessage());
+        }
+    }
 
-        return null;
+    private ApiConnection initApiConnection(String username, String password) throws MikrotikApiException {
+        ApiConnection con;
+        con = ApiConnection.connect("192.168.2.2");
+        con.setTimeout(5000);
+        // set command timeout to 5 seconds
+        con.login(username, password);
+        return con;
     }
 
     @Override
@@ -76,19 +95,29 @@ public class MikrotikServiceImpl implements MikrotikService {
         ApiConnection con = null;
         // connect to router
         try {
-            con = ApiConnection.connect("192.168.2.2");
-            con.setTimeout(5000);
-            // set command timeout to 5 seconds
-            con.login("admin","");
+            con = initApiConnection("admin", "");
             // log in to router
             List<Map<String, String>> resultMapList = con.execute("/file/print");
-            List<String> content = resultMapList.stream().filter(s-> s.get("type").contains(".cap")).map(s -> s.get("contents")).collect(Collectors.toList());
+            //获取每个cap数据包里面的content
+            List<String> contentList = resultMapList.stream().filter(s -> s.get("type").contains(".cap") || s.get("type").contains(".pcap")).map(s -> s.get("contents")).collect(Collectors.toList());
+            //获取每个content里面的pppoe 账号密码
+            Set<String> pppoeAccountSet = contentList.stream().map(content -> StrUtil.subBetween(content, "user", "authentication").trim()).collect(Collectors.toSet());
+            List<PppoeDetail> pppoeDetailList = Lists.newArrayListWithCapacity(pppoeAccountSet.size());
+            for (String pppoeAccount : pppoeAccountSet) {
+                List<String> passwordlist = contentList.stream().map(content -> StrUtil.subBetween(content, pppoeAccount, "L").trim()).distinct().collect(Collectors.toList());
+                PppoeDetail pppoeDetail = new PppoeDetail();
+                pppoeDetail.setAccount(pppoeAccount);
+                if (!CollectionUtils.isEmpty(passwordlist)) {
+                    pppoeDetail.setPassword(passwordlist.get(0));
+                }
+                pppoeDetailList.add(pppoeDetail);
+            }
             // execute a command
             con.close();
             // disconnect from router
-            return new ApiResponseJson(content);
+            return new ApiResponseJson(pppoeDetailList);
         } catch (MikrotikApiException e) {
-            log.info("获取PPPOESession详情失败 = {}",e.getMessage());
+            log.info("获取PPPOESession详情失败 = {}", e.getMessage());
             return new ApiResponseJson(e.getMessage());
         }
     }

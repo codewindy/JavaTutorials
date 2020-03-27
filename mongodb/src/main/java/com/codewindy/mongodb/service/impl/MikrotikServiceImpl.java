@@ -63,8 +63,8 @@ public class MikrotikServiceImpl implements MikrotikService {
         try {
             con = initApiConnection("admin", "");
             // log in to router
-            con.execute(" /ip/pool/print");
-            con.execute(" /ip/pool/add name=pool1 ranges=10.10.10.2-10.10.20.1");
+            con.execute("/ip/pool/print");
+            con.execute("/ip/pool/add name=pool1 ranges=10.10.10.2-10.10.20.1");
             con.execute("/ppp/profile/add name=pppoe_10M remote-address=pool1");
             con.execute("/ppp/secret/add name=0327 password=0327Test service=pppoe profile=pppoe_10M");
             con.execute("/interface/pppoe-server/server/add authentication=pap service-name=PPPoE_Server interface=ether1 one-session-per-host=yes default-profile=pppoe_10M");
@@ -124,6 +124,13 @@ public class MikrotikServiceImpl implements MikrotikService {
 
     public ApiResponseJson downloadPPPOESession(String pcapFileName) {
         //下载Packet Sniffer下载创建的pcap文件
+        //TODO
+        //1. 不能直接抓去pppoe-session的数据
+        //2. pppoe 服务器的ip 地址动态传入
+        //3. 切换网络会出现winbox退出
+        //4. file print detail 不能查看2kb之外大文件，无法解析出contents内容
+        //5. 登录接口只调用一次，使用redis缓存账号密码
+        //6. 统一修改接口返回参数 T data
         return null;
     }
 

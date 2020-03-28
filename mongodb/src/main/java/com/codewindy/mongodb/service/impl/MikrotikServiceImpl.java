@@ -98,6 +98,14 @@ public class MikrotikServiceImpl implements MikrotikService {
         return con;
     }
 
+    /**
+     * 解析后的json中包含了\u0000 空格
+     *  {
+     *         "account": "test4pppoe",
+     *         "password": "123456Test\u0000\u0000\u0000\u0000\u0000\u0000"
+     *     }
+     * @return
+     */
     @Override
     public ApiResponseJson getPcapFileDetail() {
         ApiConnection con = null;

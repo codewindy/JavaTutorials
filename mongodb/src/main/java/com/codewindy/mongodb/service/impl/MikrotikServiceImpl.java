@@ -55,6 +55,7 @@ public class MikrotikServiceImpl implements MikrotikService {
     /ip pool add name=pppoe_pool1 ranges=10.10.10.2-10.10.10.254
     /ppp profile add name=pppoe_profile local-address=10.10.10.1 remote-address=pppoe_pool1
     /interface pppoe-server server add authentication=pap service-name=PPPoE_Server interface=wan one-session-per-host=yes default-profile=pppoe_profile
+    Mikrotik API 调用和直接winbox的不同，需要添加/ 转义
        */
     @Override
     public ApiResponseJson createPPPOEServer(String ipPoolRange) {
@@ -70,10 +71,17 @@ public class MikrotikServiceImpl implements MikrotikService {
             con.execute("/interface/pppoe-server/server/add authentication=pap service-name=PPPoE_Server interface=ether1 one-session-per-host=yes default-profile=pppoe_10M");
             con.execute("/interface/pppoe-server/server/enable numbers=0");
             //开始执行抓包pppoe-session
-            String command4capFileName = "/tool/sniffer/set file-name=%s.cap filter-mac-protocol=pppoe memory-limit=1000KiB";
+            String command4capFileName = "/tool/sniffer/set file-name=%s.cap filter-mac-protocol=pppoe memory-limit=100KiB";
             con.execute(String.format(command4capFileName, DateUtil.today()));
             log.info("开始执行抓包pppoe-session==={}", String.format(command4capFileName, DateUtil.today()));
-            List<Map<String, String>> execute = con.execute("/tool/sniffer/start mac-protocol=pppoe interface=ether1 direction=rx");
+            con.execute("/tool/sniffer/start mac-protocol=pppoe interface=ether1 direction=rx");
+            List<Map<String, String>> resultMapList = con.execute("/file/print");
+            for (Map<String, String> fileMap : resultMapList) {
+                if ((fileMap.get("type").contains(".cap") || fileMap.get("type").contains(".pcap"))&& Integer.parseInt(fileMap.get("size"))>1000){
+                    //创建pppoe服务器抓包时候控制文件size 一般大于2000B 就无法执行file print detail，即不能在terminal上解析报文了
+                    con.execute("/tool/sniffer/stop");
+                }
+            }
             return new ApiResponseJson("初始化pppoe服务器成功!");
         } catch (MikrotikApiException e) {
             log.info("登录RouterOS失败 = {}", e.getMessage());
@@ -98,17 +106,19 @@ public class MikrotikServiceImpl implements MikrotikService {
             con = initApiConnection("admin", "");
             // log in to router
             List<Map<String, String>> resultMapList = con.execute("/file/print");
+            resultMapList.stream().filter(s -> s.get("type").contains(".cap") || s.get("type").contains(".pcap")).forEach(s -> System.out.println("pcap报文的size="+s.get("size")));
             //获取每个cap数据包里面的content
             List<String> contentList = resultMapList.stream().filter(s -> s.get("type").contains(".cap") || s.get("type").contains(".pcap")).map(s -> s.get("contents")).collect(Collectors.toList());
             //获取每个content里面的pppoe 账号密码
             Set<String> pppoeAccountSet = contentList.stream().map(content -> StrUtil.subBetween(content, "user", "authentication").trim()).collect(Collectors.toSet());
             List<PppoeDetail> pppoeDetailList = Lists.newArrayListWithCapacity(pppoeAccountSet.size());
             for (String pppoeAccount : pppoeAccountSet) {
-                List<String> passwordlist = contentList.stream().map(content -> StrUtil.subBetween(content, pppoeAccount, "L").trim()).distinct().collect(Collectors.toList());
+                List<String> passwordlist = contentList.stream().filter(content->content.contains(pppoeAccount)).map(content -> StrUtil.subBetween(content, pppoeAccount, " ").trim()).distinct().collect(Collectors.toList());
                 PppoeDetail pppoeDetail = new PppoeDetail();
                 pppoeDetail.setAccount(pppoeAccount);
                 if (!CollectionUtils.isEmpty(passwordlist)) {
-                    pppoeDetail.setPassword(passwordlist.get(0));
+                    //直接截取字符串 去除了二进制流中的乱码 �LV
+                    pppoeDetail.setPassword(StrUtil.subPre(passwordlist.get(0),16));
                 }
                 pppoeDetailList.add(pppoeDetail);
             }

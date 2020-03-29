@@ -5,8 +5,6 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.ssh.JschUtil;
 import cn.hutool.extra.ssh.Sftp;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.codewindy.mongodb.pojo.ApiResponseJson;
 import com.codewindy.mongodb.pojo.PppoeDetail;
 import com.codewindy.mongodb.service.MikrotikService;
@@ -24,6 +22,8 @@ import java.util.stream.Collectors;
 
 /**
  * @author codewindy
+ * @desc <a href="https://wiki.mikrotik.com/wiki/Manual:RouterOS_features">RouterOS_features</>
+ *       RouterOS is MikroTik's stand-alone operating system based on linux v3.3.5 kernel.
  * @date 2020-03-25 9:44 PM
  * @since 1.0.0
  */

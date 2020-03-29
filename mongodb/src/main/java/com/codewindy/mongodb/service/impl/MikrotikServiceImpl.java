@@ -153,11 +153,11 @@ public class MikrotikServiceImpl implements MikrotikService {
         //5. 登录接口只调用一次，使用redis缓存账号密码
         //6. 统一修改接口返回参数 T data
         //7. 使用vim 或cat 来解析cap或pcap抓包文件
-        ApiConnection con = null;
+        //ApiConnection con = null;
         // connect to router
         //C:\WBYF_IDEA
         try {
-            con = initApiConnection("admin", "");
+           // con = initApiConnection("admin", "");
             // log in to router
             //List<Map<String, String>> resultMapList = con.execute("/file/print");
             Sftp sftp= JschUtil.createSftp("192.168.2.2", 22, "admin", "");
@@ -177,7 +177,7 @@ public class MikrotikServiceImpl implements MikrotikService {
 
             sftp.close();
             return new ApiResponseJson("下载pcap数据文件成功");
-        } catch (MikrotikApiException e) {
+        } catch (Exception e) {
             log.info("下载pcap抓包文件失败 = {}", e.getMessage());
             return new ApiResponseJson(e.getMessage());
         }

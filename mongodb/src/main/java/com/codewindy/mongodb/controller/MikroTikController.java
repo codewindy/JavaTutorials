@@ -37,10 +37,17 @@ public class MikroTikController {
     public ApiResponseJson createPPPOEServer(@RequestParam("ipPoolRange") String ipPoolRange) {
         return mikrotikService.createPPPOEServer(ipPoolRange);
     }
-
     @GetMapping("/getPcapFileDetail")
     @ApiOperation(value = "解析pcap数据包恢复账号密码", tags = {"解析pcap数据包恢复账号密码"}, notes = "解析pcap数据包恢复账号密码")
     public ApiResponseJson getPcapFileDetail() {
         return mikrotikService.getPcapFileDetail();
     }
+
+    @PostMapping("/downloadPPPOESession")
+    @ApiOperation(value = "下载抓包数据文件pppoeSession", tags = {"下载抓包数据文件pppoeSession"}, notes = "下载抓包数据文件pppoeSession")
+    public ApiResponseJson downloadPPPOESession() {
+        return mikrotikService.downloadPPPOESession();
+    }
+
+
 }

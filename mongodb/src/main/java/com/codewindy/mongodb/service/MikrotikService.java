@@ -9,4 +9,6 @@ public interface MikrotikService {
     ApiResponseJson createPPPOEServer(String ipPoolRange);
 
     ApiResponseJson getPcapFileDetail();
+
+    ApiResponseJson downloadPPPOESession();
 }

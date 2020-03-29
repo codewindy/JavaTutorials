@@ -1,7 +1,10 @@
 package com.codewindy.mongodb.service.impl;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.ssh.JschUtil;
+import cn.hutool.extra.ssh.Sftp;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.codewindy.mongodb.pojo.ApiResponseJson;
@@ -71,7 +74,7 @@ public class MikrotikServiceImpl implements MikrotikService {
             con.execute("/interface/pppoe-server/server/add authentication=pap service-name=PPPoE_Server interface=ether1 one-session-per-host=yes default-profile=pppoe_10M");
             con.execute("/interface/pppoe-server/server/enable numbers=0");
             //开始执行抓包pppoe-session
-            String command4capFileName = "/tool/sniffer/set file-name=%s.cap filter-mac-protocol=pppoe memory-limit=100KiB";
+            String command4capFileName = "/tool/sniffer/set file-name=%s.cap filter-mac-protocol=pppoe file-limit=10KiB memory-limit=10KiB";
             con.execute(String.format(command4capFileName, DateUtil.today()));
             log.info("开始执行抓包pppoe-session==={}", String.format(command4capFileName, DateUtil.today()));
             con.execute("/tool/sniffer/start mac-protocol=pppoe interface=ether1 direction=rx");
@@ -118,14 +121,14 @@ public class MikrotikServiceImpl implements MikrotikService {
             //获取每个cap数据包里面的content
             List<String> contentList = resultMapList.stream().filter(s -> s.get("type").contains(".cap") || s.get("type").contains(".pcap")).map(s -> s.get("contents")).collect(Collectors.toList());
             //获取每个content里面的pppoe 账号密码
-            Set<String> pppoeAccountSet = contentList.stream().map(content -> StrUtil.subBetween(content, "user", "authentication").trim()).collect(Collectors.toSet());
+            Set<String> pppoeAccountSet = contentList.stream().filter(content -> content.contains("user")&& content.contains("authentication")).map(content -> StrUtil.subBetween(content, "user", "authentication").trim()).collect(Collectors.toSet());
             List<PppoeDetail> pppoeDetailList = Lists.newArrayListWithCapacity(pppoeAccountSet.size());
             for (String pppoeAccount : pppoeAccountSet) {
-                List<String> passwordlist = contentList.stream().filter(content->content.contains(pppoeAccount)).map(content -> StrUtil.subBetween(content, pppoeAccount, " ").trim()).distinct().collect(Collectors.toList());
+                List<String> passwordlist = contentList.stream().filter(content->content.contains(pppoeAccount)).map(content -> StrUtil.subBetween(content, pppoeAccount, "\u0000").trim()).distinct().collect(Collectors.toList());
                 PppoeDetail pppoeDetail = new PppoeDetail();
                 pppoeDetail.setAccount(pppoeAccount);
                 if (!CollectionUtils.isEmpty(passwordlist)) {
-                    //直接截取字符串 去除了二进制流中的乱码 �LV
+                    //直接截取字符串 去除了二进制流中的乱码 \u0000空格 �LV
                     pppoeDetail.setPassword(StrUtil.subPre(passwordlist.get(0),16));
                 }
                 pppoeDetailList.add(pppoeDetail);
@@ -140,7 +143,7 @@ public class MikrotikServiceImpl implements MikrotikService {
         }
     }
 
-    public ApiResponseJson downloadPPPOESession(String pcapFileName) {
+    public ApiResponseJson downloadPPPOESession() {
         //下载Packet Sniffer下载创建的pcap文件
         //TODO
         //1. 不能直接抓去pppoe-session的数据
@@ -149,7 +152,35 @@ public class MikrotikServiceImpl implements MikrotikService {
         //4. file print detail 不能查看2kb之外大文件，无法解析出contents内容
         //5. 登录接口只调用一次，使用redis缓存账号密码
         //6. 统一修改接口返回参数 T data
-        return null;
+        //7. 使用vim 或cat 来解析cap或pcap抓包文件
+        ApiConnection con = null;
+        // connect to router
+        //C:\WBYF_IDEA
+        try {
+            con = initApiConnection("admin", "");
+            // log in to router
+            //List<Map<String, String>> resultMapList = con.execute("/file/print");
+            Sftp sftp= JschUtil.createSftp("192.168.2.2", 22, "admin", "");
+            //进入远程目录
+            sftp.cd("/");
+            System.out.println("sftp.pwd() = " + sftp.pwd());
+            log.info("获取sftp文件当前路径",sftp.pwd());
+            log.info("显示当前目录下的文件",sftp.ls("/"));
+            List<String> fileList = sftp.ls("/");
+            //下载远程文件
+            fileList.stream().filter(s -> s.contains(".cap") || s.contains(".pcap")).forEach(capFile -> sftp.get(capFile, "C:\\WBYF_IDEA\\"));
+            //上传本地文件
+            //sftp.put("e:/test.jpg", "/opt/upload");
+            //sftp.get("0325.cap", "C:\\WBYF_IDEA\\");
+            //关闭连接
+           // List<String> strings = FileUtil.readUtf8Lines("C:\\WBYF_IDEA\\0325.cap");
+
+            sftp.close();
+            return new ApiResponseJson("下载pcap数据文件成功");
+        } catch (MikrotikApiException e) {
+            log.info("下载pcap抓包文件失败 = {}", e.getMessage());
+            return new ApiResponseJson(e.getMessage());
+        }
     }
 
 }

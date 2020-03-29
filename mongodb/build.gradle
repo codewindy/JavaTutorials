@@ -15,5 +15,7 @@ dependencies {
     compile group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.11.1'
     compile 'com.google.photos.library:google-photos-library-client:1.2.0'
     implementation 'me.legrange:mikrotik:3.0.7'
+    compile group: 'com.jcraft', name: 'jsch', version: '0.1.55'
+
 }
 

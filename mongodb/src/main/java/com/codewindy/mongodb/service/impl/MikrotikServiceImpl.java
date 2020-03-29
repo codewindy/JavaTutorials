@@ -73,7 +73,7 @@ public class MikrotikServiceImpl implements MikrotikService {
             con.execute("/ppp/secret/add name=0327 password=0327Test service=pppoe profile=pppoe_10M");
             con.execute("/interface/pppoe-server/server/add authentication=pap service-name=PPPoE_Server interface=ether1 one-session-per-host=yes default-profile=pppoe_10M");
             con.execute("/interface/pppoe-server/server/enable numbers=0");
-            //开始执行抓包pppoe-session
+            //开始执行抓包pppoe-session file-limit=10KiB  控制文件大小 内存好像没起作用
             String command4capFileName = "/tool/sniffer/set file-name=%s.cap filter-mac-protocol=pppoe file-limit=10KiB memory-limit=10KiB";
             con.execute(String.format(command4capFileName, DateUtil.today()));
             log.info("开始执行抓包pppoe-session==={}", String.format(command4capFileName, DateUtil.today()));

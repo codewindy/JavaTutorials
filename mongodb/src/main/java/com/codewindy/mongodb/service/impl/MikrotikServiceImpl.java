@@ -208,6 +208,8 @@ public class MikrotikServiceImpl implements MikrotikService {
 
         System.out.println("path = " + path);
         //已经获取到解析好的pcap二进制流数据转String了，接下来分批去重提取账号密码
+        //1， winbox公用api端口会被挤下线
+        //2. mac地址修改成和服务器一样的
         return  new ApiResponseJson(parsedStringList);
     }
 }

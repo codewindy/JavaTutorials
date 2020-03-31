@@ -49,5 +49,10 @@ public class MikroTikController {
         return mikrotikService.downloadPPPOESession();
     }
 
+    @PostMapping("/parseLocalPcapFile")
+    @ApiOperation(value = "解析下载到本地的pcap数据包", tags = {"解析下载到本地的pcap数据包"}, notes = "解析下载到本地的pcap数据包")
+    public ApiResponseJson parseLocalPcapFile() {
+        return mikrotikService.parseLocalPcapFile();
+    }
 
 }

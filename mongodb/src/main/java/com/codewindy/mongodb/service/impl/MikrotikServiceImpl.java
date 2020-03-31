@@ -2,9 +2,11 @@ package com.codewindy.mongodb.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.ssh.JschUtil;
 import cn.hutool.extra.ssh.Sftp;
+import com.alibaba.fastjson.JSON;
 import com.codewindy.mongodb.pojo.ApiResponseJson;
 import com.codewindy.mongodb.pojo.PppoeDetail;
 import com.codewindy.mongodb.service.MikrotikService;
@@ -14,7 +16,12 @@ import me.legrange.mikrotik.ApiConnection;
 import me.legrange.mikrotik.MikrotikApiException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -183,4 +190,24 @@ public class MikrotikServiceImpl implements MikrotikService {
         }
     }
 
+    @Override
+    public ApiResponseJson parseLocalPcapFile() {
+        String localPwd = System.getProperty("user.dir");
+        System.out.println("user.dir = " + localPwd);
+
+        String path ="C:\\WBYF_IDEA\\JavaTutorials\\mongodb\\src\\main\\resources\\pcap";
+        List<String> fileList = FileUtil.listFileNames(path);
+        List<String> parsedStringList = Lists.newArrayListWithCapacity(fileList.size());
+        for (String pcapFileName : fileList) {
+            if (pcapFileName.contains(".cap")||pcapFileName.contains(".pcap")) {
+                System.out.println("pcapFileName = " + path+File.separator+pcapFileName);
+                String parsedString = FileUtil.readString(path+File.separator+pcapFileName, CharsetUtil.UTF_8);
+                parsedStringList.add(parsedString);
+            }
+        }
+
+        System.out.println("path = " + path);
+        //已经获取到解析好的pcap二进制流数据转String了，接下来分批去重提取账号密码
+        return  new ApiResponseJson(parsedStringList);
+    }
 }

@@ -6,7 +6,6 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.ssh.JschUtil;
 import cn.hutool.extra.ssh.Sftp;
-import com.alibaba.fastjson.JSON;
 import com.codewindy.mongodb.pojo.ApiResponseJson;
 import com.codewindy.mongodb.pojo.PppoeDetail;
 import com.codewindy.mongodb.service.MikrotikService;
@@ -16,12 +15,8 @@ import me.legrange.mikrotik.ApiConnection;
 import me.legrange.mikrotik.MikrotikApiException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ResourceUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -150,6 +145,7 @@ public class MikrotikServiceImpl implements MikrotikService {
         }
     }
 
+    @Override
     public ApiResponseJson downloadPPPOESession() {
         //下载Packet Sniffer下载创建的pcap文件
         //TODO

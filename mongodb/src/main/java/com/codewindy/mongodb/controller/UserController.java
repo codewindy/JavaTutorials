@@ -4,7 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import com.codewindy.mongodb.pojo.ApiResponseJson;
+import com.codewindy.mongodb.pojo.ApiResult;
 import com.codewindy.mongodb.pojo.User;
 import com.codewindy.mongodb.service.UserService;
 import com.codewindy.mongodb.utils.ValidatorUtils;
@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -36,17 +35,17 @@ public class UserController {
    @Autowired
    private RedissonClient redissonClient;*/
 
-    @ApiOperation(value = "查询用户信息", notes = "查询用户信息", response = ApiResponseJson.class)
+    @ApiOperation(value = "查询用户信息", notes = "查询用户信息", response = ApiResult.class)
     @GetMapping(value = "/getUser/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public User getUser(@PathVariable("userId") String userId) {
         return userService.getUser(userId);
     }
 
-    @ApiOperation(value = "查询用户列表", notes = "查询用户列表", response = ApiResponseJson.class)
+    @ApiOperation(value = "查询用户列表", notes = "查询用户列表", response = ApiResult.class)
     @GetMapping(value = "/getList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping(value = "/getList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ApiResponseJson getList() {
-        ApiResponseJson apiJson = new ApiResponseJson();
+    public ApiResult getList() {
+        ApiResult apiJson = new ApiResult();
         ArrayList<User> list = new ArrayList<User>();
         User user = new User();
         user.setId(UUID.randomUUID().toString().replace("-", ""));
@@ -84,7 +83,7 @@ public class UserController {
             param.put("data", ja);
             apiJson.setData(param);
         }
-        apiJson.setError("校验失败");
+        apiJson.setMessage("校验失败");
         return apiJson;
     }
 }

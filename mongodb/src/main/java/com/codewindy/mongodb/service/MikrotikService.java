@@ -1,18 +1,16 @@
 package com.codewindy.mongodb.service;
 
-import com.codewindy.mongodb.pojo.ApiResponseJson;
-
-import java.io.FileNotFoundException;
+import com.codewindy.mongodb.pojo.ApiResult;
 
 public interface MikrotikService {
 
-    ApiResponseJson login(String username, String password);
+    ApiResult login(String username, String password);
 
-    ApiResponseJson createPPPOEServer(String ipPoolRange);
+    ApiResult createPPPOEServer(String ipPoolRange);
 
-    ApiResponseJson getPcapFileDetail();
+    ApiResult getPcapFileDetail();
 
-    ApiResponseJson downloadPPPOESession();
+    ApiResult downloadPPPOESession();
 
-    ApiResponseJson parseLocalPcapFile();
+    ApiResult parseLocalPcapFile();
 }

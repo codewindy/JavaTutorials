@@ -6,7 +6,7 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.ssh.JschUtil;
 import cn.hutool.extra.ssh.Sftp;
-import com.codewindy.mongodb.pojo.ApiResponseJson;
+import com.codewindy.mongodb.pojo.ApiResult;
 import com.codewindy.mongodb.pojo.PppoeDetail;
 import com.codewindy.mongodb.service.MikrotikService;
 import com.google.common.collect.Lists;
@@ -38,7 +38,7 @@ public class MikrotikServiceImpl implements MikrotikService {
      * @return
      */
     @Override
-    public ApiResponseJson login(String username, String password) {
+    public ApiResult login(String username, String password) {
         ApiConnection con = null;
         // connect to router
         try {
@@ -48,11 +48,11 @@ public class MikrotikServiceImpl implements MikrotikService {
             // execute a command
             con.close();
             // disconnect from router
-            return new ApiResponseJson(execute);
+            return new ApiResult(execute);
 
         } catch (MikrotikApiException e) {
             log.info("登录RouterOS失败 = {}", e.getMessage());
-            return new ApiResponseJson(e.getMessage());
+            return new ApiResult(e.getMessage());
         }
     }
 
@@ -63,7 +63,7 @@ public class MikrotikServiceImpl implements MikrotikService {
     Mikrotik API 调用和直接winbox的不同，需要添加/ 转义
        */
     @Override
-    public ApiResponseJson createPPPOEServer(String ipPoolRange) {
+    public ApiResult createPPPOEServer(String ipPoolRange) {
         ApiConnection con = null;
         // connect to router
         try {
@@ -87,10 +87,10 @@ public class MikrotikServiceImpl implements MikrotikService {
                     con.execute("/tool/sniffer/stop");
                 }
             }
-            return new ApiResponseJson("初始化pppoe服务器成功!");
+            return new ApiResult("初始化pppoe服务器成功!");
         } catch (MikrotikApiException e) {
             log.info("登录RouterOS失败 = {}", e.getMessage());
-            return new ApiResponseJson(e.getMessage());
+            return new ApiResult(e.getMessage());
         }
     }
 
@@ -112,7 +112,7 @@ public class MikrotikServiceImpl implements MikrotikService {
      * @return
      */
     @Override
-    public ApiResponseJson getPcapFileDetail() {
+    public ApiResult getPcapFileDetail() {
         ApiConnection con = null;
         // connect to router
         try {
@@ -138,15 +138,15 @@ public class MikrotikServiceImpl implements MikrotikService {
             // execute a command
             con.close();
             // disconnect from router
-            return new ApiResponseJson(pppoeDetailList);
+            return new ApiResult(pppoeDetailList);
         } catch (MikrotikApiException e) {
             log.info("获取PPPOESession详情失败 = {}", e.getMessage());
-            return new ApiResponseJson(e.getMessage());
+            return new ApiResult(e.getMessage());
         }
     }
 
     @Override
-    public ApiResponseJson downloadPPPOESession() {
+    public ApiResult downloadPPPOESession() {
         //下载Packet Sniffer下载创建的pcap文件
         //TODO
         //1. 不能直接抓去pppoe-session的数据
@@ -179,15 +179,15 @@ public class MikrotikServiceImpl implements MikrotikService {
            // List<String> strings = FileUtil.readUtf8Lines("C:\\WBYF_IDEA\\0325.cap");
 
             sftp.close();
-            return new ApiResponseJson("下载pcap数据文件成功");
+            return new ApiResult("下载pcap数据文件成功");
         } catch (Exception e) {
             log.info("下载pcap抓包文件失败 = {}", e.getMessage());
-            return new ApiResponseJson(e.getMessage());
+            return new ApiResult(e.getMessage());
         }
     }
 
     @Override
-    public ApiResponseJson parseLocalPcapFile() {
+    public ApiResult parseLocalPcapFile() {
         String localPwd = System.getProperty("user.dir");
         System.out.println("user.dir = " + localPwd);
 
@@ -206,6 +206,6 @@ public class MikrotikServiceImpl implements MikrotikService {
         //已经获取到解析好的pcap二进制流数据转String了，接下来分批去重提取账号密码
         //1， winbox公用api端口会被挤下线
         //2. mac地址修改成和服务器一样的
-        return  new ApiResponseJson(parsedStringList);
+        return  new ApiResult(parsedStringList);
     }
 }

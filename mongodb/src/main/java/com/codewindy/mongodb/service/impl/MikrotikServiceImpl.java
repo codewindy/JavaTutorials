@@ -166,7 +166,6 @@ public class MikrotikServiceImpl implements MikrotikService {
             Sftp sftp= JschUtil.createSftp("192.168.2.2", 22, "admin", "");
             //进入远程目录
             sftp.cd("/");
-            System.out.println("sftp.pwd() = " + sftp.pwd());
             log.info("获取sftp文件当前路径",sftp.pwd());
             log.info("显示当前目录下的文件",sftp.ls("/"));
             List<String> fileList = sftp.ls("/");
@@ -188,8 +187,7 @@ public class MikrotikServiceImpl implements MikrotikService {
 
     @Override
     public ApiResult parseLocalPcapFile() {
-        String localPwd = System.getProperty("user.dir");
-        System.out.println("user.dir = " + localPwd);
+        //String localPwd = System.getProperty("user.dir");
 
         String path ="C:\\WBYF_IDEA\\JavaTutorials\\mongodb\\src\\main\\resources\\pcap";
         List<String> fileList = FileUtil.listFileNames(path);
@@ -202,7 +200,7 @@ public class MikrotikServiceImpl implements MikrotikService {
             }
         }
 
-        System.out.println("path = " + path);
+        //System.out.println("path = " + path);
         //已经获取到解析好的pcap二进制流数据转String了，接下来分批去重提取账号密码
         //1， winbox公用api端口会被挤下线
         //2. mac地址修改成和服务器一样的

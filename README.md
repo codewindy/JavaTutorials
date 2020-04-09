@@ -4,3 +4,6 @@
 * `MacOS 下快捷键 ⌘⌥L` 格式化代码 ` ⌥代表 option`
 * `idea 激活码`[链接](http://idea.medeming.com/jets)`http://idea.medeming.com/jets`
 * `https://developers.google.com/photos/library/guides/get-started-java`[链接](https://github.com/google/java-photoslibrary) Google photo RESTFul api
+# MacOS下的快捷键
+* `win + alt + l` 格式化代码
+* `ctrl + alt + o` 更新导入的依赖包

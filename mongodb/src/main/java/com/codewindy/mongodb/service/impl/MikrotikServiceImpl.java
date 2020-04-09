@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.ssh.JschUtil;
 import cn.hutool.extra.ssh.Sftp;
 import com.codewindy.mongodb.pojo.ApiResult;
+import com.codewindy.mongodb.pojo.ErrorEnum;
 import com.codewindy.mongodb.pojo.PppoeDetail;
 import com.codewindy.mongodb.service.MikrotikService;
 import com.google.common.collect.Lists;
@@ -52,7 +53,7 @@ public class MikrotikServiceImpl implements MikrotikService {
 
         } catch (MikrotikApiException e) {
             log.info("登录RouterOS失败 = {}", e.getMessage());
-            return new ApiResult(e.getMessage());
+            return new ApiResult(ErrorEnum.ERROR.getKey(),ErrorEnum.ERROR.getValue(),e.getMessage());
         }
     }
 
@@ -90,7 +91,7 @@ public class MikrotikServiceImpl implements MikrotikService {
             return new ApiResult("初始化pppoe服务器成功!");
         } catch (MikrotikApiException e) {
             log.info("登录RouterOS失败 = {}", e.getMessage());
-            return new ApiResult(e.getMessage());
+            return new ApiResult(ErrorEnum.ERROR.getKey(),ErrorEnum.ERROR.getValue(),e.getMessage());
         }
     }
 
@@ -141,7 +142,7 @@ public class MikrotikServiceImpl implements MikrotikService {
             return new ApiResult(pppoeDetailList);
         } catch (MikrotikApiException e) {
             log.info("获取PPPOESession详情失败 = {}", e.getMessage());
-            return new ApiResult(e.getMessage());
+            return new ApiResult(ErrorEnum.ERROR.getKey(),ErrorEnum.ERROR.getValue(),e.getMessage());
         }
     }
 
@@ -181,7 +182,7 @@ public class MikrotikServiceImpl implements MikrotikService {
             return new ApiResult("下载pcap数据文件成功");
         } catch (Exception e) {
             log.info("下载pcap抓包文件失败 = {}", e.getMessage());
-            return new ApiResult(e.getMessage());
+            return new ApiResult(ErrorEnum.ERROR.getKey(),ErrorEnum.ERROR.getValue(),e.getMessage());
         }
     }
 

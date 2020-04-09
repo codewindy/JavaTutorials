@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@Api(value = "用户服务入口", tags = "用户服务入口")
+@Api(value = "用户服务入口")
 @Slf4j // using need install plugins
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -36,14 +36,14 @@ public class UserController {
    private RedissonClient redissonClient;*/
 
     @ApiOperation(value = "查询用户信息", notes = "查询用户信息", response = ApiResult.class)
-    @GetMapping(value = "/getUser/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/getUser/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public User getUser(@PathVariable("userId") String userId) {
         return userService.getUser(userId);
     }
 
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表", response = ApiResult.class)
-    @GetMapping(value = "/getList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @PostMapping(value = "/getList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/getList", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/getList", produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiResult getList() {
         ApiResult apiJson = new ApiResult();
         ArrayList<User> list = new ArrayList<User>();

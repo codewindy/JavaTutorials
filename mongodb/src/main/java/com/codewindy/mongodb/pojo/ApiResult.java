@@ -12,11 +12,11 @@ import java.io.Serializable;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ApiResult implements Serializable {
+public class ApiResult<T> implements Serializable {
     private static final long serialVersionUID = -8134781164681812987L;
     private String code;
     private String message;
-    private Object data;
+    private T data;
 
     public ApiResult() {
         this.message = ErrorEnum.SUCCESS.getValue();
@@ -24,13 +24,13 @@ public class ApiResult implements Serializable {
         this.data = null;
     }
 
-    public ApiResult(Object data) {
+    public ApiResult(T data) {
         this.message = ErrorEnum.SUCCESS.getValue();
         this.code = ErrorEnum.SUCCESS.getKey();
         this.data = data;
     }
 
-    public ApiResult(String code, String message, Object data) {
+    public ApiResult(String code, String message, T data) {
         super();
         this.code = code;
         this.message = message;

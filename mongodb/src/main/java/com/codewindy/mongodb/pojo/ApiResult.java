@@ -36,4 +36,16 @@ public class ApiResult<T> implements Serializable {
         this.message = message;
         this.data = data;
     }
+    public ApiResult<T> error(T data) {
+        this.code = ErrorEnum.ERROR.getKey();;
+        this.message = ErrorEnum.ERROR.getValue();
+        this.data = data;
+        return this;
+    }
+    public ApiResult<T> success(T data) {
+        this.code = ErrorEnum.SUCCESS.getKey();;
+        this.message = ErrorEnum.SUCCESS.getValue();
+        this.data = data;
+        return this;
+    }
 }

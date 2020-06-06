@@ -1,6 +1,9 @@
 package com.codewindy.mongodb.pojo;
 
 
+import lombok.Getter;
+
+@Getter
 public enum ErrorEnum {
     SUCCESS("000000", "OK"), ERROR("404000", "FAIL");
 
@@ -12,20 +15,5 @@ public enum ErrorEnum {
         this.value = value;
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
+    //001001 如果设置为Integer 会被转换程八进制的513
 }

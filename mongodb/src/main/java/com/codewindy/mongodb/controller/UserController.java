@@ -1,13 +1,21 @@
 package com.codewindy.mongodb.controller;
 
 import cn.hutool.core.date.DateUtil;
+
+import cn.hutool.core.util.IdUtil;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.metadata.Sheet;
+import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import com.codewindy.mongodb.pojo.ApiResult;
 import com.codewindy.mongodb.pojo.User;
 import com.codewindy.mongodb.service.UserService;
+import com.codewindy.mongodb.utils.ExcelUtil;
 import com.codewindy.mongodb.utils.ValidatorUtils;
+import com.codewindy.mongodb.vo.UserVO;
+import com.google.api.client.util.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +24,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.OutputStream;
 
 import java.util.*;
 
 @RestController
-@Api(value = "用户服务入口")
+@Api(value = "用户服务")
 @Slf4j // using need install plugins
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -42,7 +55,6 @@ public class UserController {
     }
 
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表", response = ApiResult.class)
-    @GetMapping(value = "/getList", produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value = "/getList", produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiResult getList() {
         ApiResult apiJson = new ApiResult();
@@ -86,6 +98,35 @@ public class UserController {
         apiJson.setMessage("校验失败");
         return apiJson;
     }
+    @ApiOperation(value = "导出excel文件", tags = "查询用户列表")
+    @GetMapping(value = "/exportExcel")
+    public ResponseEntity<byte[]> exportExcel(HttpServletResponse response) throws Exception {
+
+        ArrayList<UserVO> voList = Lists.newArrayList();
+        voList.add(new UserVO(IdUtil.fastUUID(),"steve jobs",23,"M","developer"));
+        String sheetName="用户下载列表";
+        String filepath="/tmp/";
+        OutputStream outputStream=null;
+        ExcelWriter writer =null;
+        try {
+            outputStream= response.getOutputStream();
+            writer =new ExcelWriter(outputStream, ExcelTypeEnum.XLS);
+            writer.write(voList, new Sheet(1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            // 千万别忘记finish 会帮忙关闭流
+            if (writer != null) {
+                writer.finish();
+            }
+            if (outputStream != null) {
+                outputStream.close();
+            }
+        }
+        return ExcelUtil.buildExcelFile(response, sheetName, filepath);
+    }
+
+
 }
 
 /**

@@ -5,6 +5,7 @@ import com.alibaba.excel.metadata.BaseRowModel;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 public class UserVO extends BaseRowModel {
 
     @ExcelProperty(value = "用户id", index = 0)

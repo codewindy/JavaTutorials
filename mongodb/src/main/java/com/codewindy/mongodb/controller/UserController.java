@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 @RestController
 @Api(value = "用户服务")
@@ -126,6 +127,10 @@ public class UserController {
         return ExcelUtil.buildExcelFile(response, sheetName, filepath);
     }
 
+    public static void main(String[] args) {
+        int sum = IntStream.range(1, 100).sum();
+        System.out.println("sum = " + sum);
+    }
 
 }
 

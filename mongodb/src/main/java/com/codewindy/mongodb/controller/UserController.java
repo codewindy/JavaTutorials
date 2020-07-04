@@ -128,8 +128,11 @@ public class UserController {
     }
 
     public static void main(String[] args) {
-        int sum = IntStream.range(1, 100).sum();
-        System.out.println("sum = " + sum);
+        // int sum = IntStream.range(1, 100).sum();
+        // System.out.println("sum = " + sum);
+        Integer code =001001;
+        // 结果确是 被转换成8进制code = 513
+
     }
 
 }

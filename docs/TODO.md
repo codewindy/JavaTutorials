@@ -19,6 +19,7 @@
 * `SpringBeanUtils`操作spring bean的工具类，主要用于想通过代码来获取bean，bean必须是spring容器管理的bean,需要把该该类注册到spring容器中，例如在applicationContext.xml中这样子注册或者通过config类@Bean注入
 * 新增asdfadsf 通过map 来对字符的出现次数计算
 * 新增pdf 下载
+* `openssl rand -base64 32` 生成随机密码
 * 新增sleuth traceId记录 和apollo接入
 * 新增分布式锁redisson的支持和配置,redis设置daemon yes并且注释掉bind localhost和设置requirePass密码或者关闭protectMode
 * redisUtils和展示Run Dashboard 在.idea目录下新增一个option

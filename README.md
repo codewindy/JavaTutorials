@@ -10,3 +10,5 @@
 * 整合easy excel 
 * 整合 xxl-job
 * 整合 solr和shiro
+* 整合https://hacpai.com/article/1587991687126 typeHandler
+* 整合https://github.com/huage2580/leeks 在Idea里面查看基金走势

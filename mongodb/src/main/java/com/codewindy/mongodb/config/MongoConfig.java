@@ -2,6 +2,7 @@ package com.codewindy.mongodb.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
@@ -12,12 +13,12 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 @Configuration
 public class MongoConfig {
 	@Bean
-	public MongoTemplate mongoTemplate(MongoDbFactory mongoDbFactory, MongoMappingContext context) {
+	public MongoTemplate mongoTemplate(MongoDatabaseFactory mongoDatabaseFactory, MongoMappingContext context) {
 
-		MappingMongoConverter converter = new MappingMongoConverter(new DefaultDbRefResolver(mongoDbFactory), context);
+		MappingMongoConverter converter = new MappingMongoConverter(new DefaultDbRefResolver(mongoDatabaseFactory), context);
 		converter.setTypeMapper(new DefaultMongoTypeMapper(null));// 去除_class column
 
-		MongoTemplate mongoTemplate = new MongoTemplate(mongoDbFactory,
+		MongoTemplate mongoTemplate = new MongoTemplate(mongoDatabaseFactory,
 				converter);
 
 		return mongoTemplate;

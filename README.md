@@ -1,5 +1,5 @@
 # JavaTutorials
-* mongodb module compile by gradle v4.10.2
+* mongodb module compile by gradle v6.6
 * http://jsonhandle.sinaapp.com/ chrome JSON extension
 * `MacOS 下快捷键 ⌘⌥L` 格式化代码 ` ⌥代表 option`
 * `idea 激活码`[链接](http://idea.medeming.com/jets)`http://idea.medeming.com/jets`

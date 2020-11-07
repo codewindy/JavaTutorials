@@ -1,3 +1,5 @@
 rootProject.name = 'JavaTutorials'
 include 'mongodb'
-
+include 'common'
+include 'mysql'
+include 'postgres'

@@ -18,3 +18,11 @@
 * jvmti enctypt jar
 * git pull difference git pull --rebase 
 * threadLocal 
+* 面向切面编程时，常用的API拦截方式有Fliter，Interceptor，ControllerAdvice以及Aspect，它们的拦截顺序为 Fliter -> Interceptor -> ControllerAdvice -> Aspect -> controller。这里我们使用Aspect来实现。
+ ```markdown
+spring aop就是一个同心圆，要执行的方法为圆心，最外层的order最小。从最外层按照AOP1、AOP2的顺序依次执行doAround方法，doBefore方法。然后执行method方法，最后按照AOP2、AOP1的顺序依次执行doAfter、doAfterReturn方法。也就是说对多个AOP来说，先before的，一定后after。
+
+对于上面的例子就是，先外层的就是对所有controller的切面，内层就是自定义注解的。 那不同的切面，顺序怎么决定呢，尤其是同格式的切面处理，譬如两个execution的情况，那spring就是随机决定哪个在外哪个在内了。
+
+所以大部分情况下，我们需要指定顺序，最简单的方式就是在Aspect切面类上加上@Order(1)注解即可，order越小最先执行，也就是位于最外层。像一些全局处理的就可以把order设小一点，具体到某个细节的就设大一点。
+```

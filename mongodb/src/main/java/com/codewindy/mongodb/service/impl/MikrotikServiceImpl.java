@@ -10,10 +10,12 @@ import com.codewindy.mongodb.pojo.ApiResult;
 import com.codewindy.mongodb.pojo.ErrorEnum;
 import com.codewindy.mongodb.pojo.PppoeDetail;
 import com.codewindy.mongodb.service.MikrotikService;
+import com.codewindy.mongodb.utils.RabbitmqUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import me.legrange.mikrotik.ApiConnection;
 import me.legrange.mikrotik.MikrotikApiException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -33,6 +35,9 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class MikrotikServiceImpl implements MikrotikService {
+
+    @Autowired
+    private RabbitmqUtil rabbitmqUtil;
     /**
      * @param username
      * @param password
@@ -114,6 +119,8 @@ public class MikrotikServiceImpl implements MikrotikService {
      */
     @Override
     public ApiResult getPcapFileDetail() {
+
+        rabbitmqUtil.sendMessage("confirmTestExchange","confirmTestQueue","我是消息");
         ApiConnection con = null;
         // connect to router
         try {

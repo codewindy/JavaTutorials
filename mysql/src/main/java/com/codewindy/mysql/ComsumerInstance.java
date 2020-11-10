@@ -2,10 +2,9 @@ package com.codewindy.mysql;
 
 import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.Exchange;
-import org.springframework.amqp.rabbit.annotation.RabbitHandler;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.annotation.*;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -17,7 +16,13 @@ import java.io.IOException;
  */
 @Slf4j
 @Component
-@RabbitListener(queues = "confirm_test_queue")
+@RabbitListener(bindings = @QueueBinding(
+        value = @Queue(name = "tt.search.insert.queue", durable = "true"),
+        exchange = @Exchange(name = "tt.item.exchange",
+                type = ExchangeTypes.FANOUT,
+                ignoreDeclarationExceptions = "true"),
+        key = {"item.insert", "item.update"}
+))
 public class ComsumerInstance {
 
     @RabbitHandler

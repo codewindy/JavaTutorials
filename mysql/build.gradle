@@ -17,6 +17,7 @@ dependencies {
     compile group: 'com.jcraft', name: 'jsch', version: '0.1.55'
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-amqp
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-amqp', version: '2.3.5.RELEASE'
+    implementation project(":common")
 
 }
 

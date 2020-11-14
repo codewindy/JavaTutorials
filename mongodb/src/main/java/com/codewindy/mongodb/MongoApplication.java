@@ -2,10 +2,12 @@ package com.codewindy.mongodb;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.context.annotation.ComponentScan;
 
 
-@SpringBootApplication(scanBasePackages="com.codewindy")
+
+@SpringBootApplication
+@ComponentScan({"com.codewindy.mongodb","com.codewindy.common"})
 //@EnableScheduling
 public class MongoApplication {
 

@@ -1,9 +1,9 @@
 package com.codewindy.mongodb.config;/*
-package com.jkwindy.demo.config;
+package com.jkwindy.demo.com.codewindy.config;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
-import org.redisson.config.Config;
+import org.redisson.com.codewindy.config.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -17,7 +17,7 @@ import java.io.IOException;
  * //指定编码，默认编码为org.redisson.codec.JsonJacksonCodec
  * //之前使用的spring-data-redis，用的客户端jedis，编码为org.springframework.data.redis.serializer.StringRedisSerializer
  * //改用redisson后为了之间数据能兼容，这里修改编码为org.redisson.client.codec.StringCodec
- * config.setCodec(new org.redisson.client.codec.StringCodec());
+ * com.codewindy.config.setCodec(new org.redisson.client.codec.StringCodec());
  *//*
 
 @Configuration

@@ -41,8 +41,7 @@ public class RabbitmqUtil implements InitializingBean {
         /**
          * 消息投递到队列失败回调处理
          */
-       // rabbitTemplate.setReturnCallback(returnCallbackService);
-
+       // rabbitTemplate.setReturnCallback(returnCallb
         /**
          * 发送消息
          */

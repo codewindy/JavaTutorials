@@ -1,6 +1,7 @@
-package config;
+package com.codewindy.common.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
@@ -12,6 +13,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @since 1.0.0
  * refer https://ld246.com/article/1600095988462
  */
+@Configuration
 public class ExcutorConfig {
     /** 核心线程数 */
     private int corePoolSize = 10;

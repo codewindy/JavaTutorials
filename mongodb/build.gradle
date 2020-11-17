@@ -3,15 +3,13 @@ version = '1.0-SNAPSHOT'
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+
+
 
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-freemarker', version: '2.2.2.RELEASE'
 
-
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.2.2.RELEASE'
 
-    compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.11.1'
     compile 'com.google.photos.library:google-photos-library-client:1.2.0'
     implementation 'me.legrange:mikrotik:3.0.7'

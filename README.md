@@ -30,6 +30,12 @@ spring aop就是一个同心圆，要执行的方法为圆心，最外层的orde
 * [springboot与cloud对应版本](https://start.spring.io/actuator/info)
 * docker pull rabbitmq
 ```
-docker run -d --name rabbitmq3.8.9 -p 5672:5672 -p 15672:15672  --hostname rabbitmq  -e RABBITMQ_DEFAULT_VHOST=/vhost -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=admin
+docker run -d --name rabbitmq3.8.9 
+-p 5672:5672 -p 15672:15672  
+--hostname rabbitmq  
+-e RABBITMQ_DEFAULT_VHOST=/vhost 
+-e RABBITMQ_DEFAULT_USER=admin 
+-e RABBITMQ_DEFAULT_PASS=admin
 
 ```
+* [死信对列](https://my.oschina.net/10000000000/blog/1624963)

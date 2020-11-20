@@ -1,5 +1,6 @@
 package com.codewindy.mongodb.utils;
 
+import cn.hutool.core.util.IdUtil;
 import com.codewindy.mongodb.service.impl.ConfirmCallbackServiceImpl;
 import com.codewindy.mongodb.service.impl.ReturnCallbackServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author codewindy
@@ -48,9 +49,11 @@ public class RabbitmqUtil implements InitializingBean {
         rabbitTemplate.convertAndSend(exchange, routingKey, msg,
                 message -> {
                     message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+                    message.getMessageProperties().setExpiration("5000");
+                    message.getMessageProperties().setContentEncoding(StandardCharsets.UTF_8.name());
                     return message;
                 },
-                new CorrelationData(UUID.randomUUID().toString()));
+                new CorrelationData(IdUtil.fastSimpleUUID()));
     }
 
     @Override

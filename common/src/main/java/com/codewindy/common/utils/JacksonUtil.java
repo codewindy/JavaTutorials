@@ -1,4 +1,4 @@
-package com.codewindy.mongodb.utils;
+package com.codewindy.common.utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;

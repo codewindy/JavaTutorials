@@ -1,4 +1,4 @@
-package com.codewindy.mongodb.utils;
+package com.codewindy.common.utils;
 
 public class ConfigureEncryptAndDecrypt {
     public static final String CHAR_ENCODING = "UTF-8";

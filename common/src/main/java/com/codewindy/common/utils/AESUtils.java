@@ -1,4 +1,4 @@
-package com.codewindy.mongodb.utils;
+package com.codewindy.common.utils;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;

@@ -1,4 +1,4 @@
-package com.codewindy.mongodb.utils;
+package com.codewindy.common.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

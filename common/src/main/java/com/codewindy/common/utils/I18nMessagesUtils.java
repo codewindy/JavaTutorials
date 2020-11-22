@@ -1,4 +1,4 @@
-package com.codewindy.mongodb.utils;
+package com.codewindy.common.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

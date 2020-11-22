@@ -1,6 +1,5 @@
-package com.codewindy.mongodb.utils;
+package com.codewindy.common.utils;
 
-import cn.hutool.core.util.IdUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.net.URLDecoder;

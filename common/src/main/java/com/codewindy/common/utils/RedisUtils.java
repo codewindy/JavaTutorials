@@ -1,4 +1,4 @@
-package com.codewindy.mongodb.utils;/*
+package com.codewindy.common.utils;/*
 package com.jkwindy.demo.utils;
 
 import lombok.extern.slf4j.Slf4j;

@@ -6,10 +6,13 @@ import com.codewindy.mongodb.service.impl.ReturnCallbackServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
+import org.springframework.amqp.rabbit.connection.PublisherCallbackChannel;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import java.nio.charset.StandardCharsets;
 
@@ -17,7 +20,6 @@ import java.nio.charset.StandardCharsets;
  * @author codewindy
  * @date 2020-11-09 11:28 PM
  * @since 1.0.0
- * RabbitTemplateInitializingBean
  */
 @Slf4j
 @Component
@@ -33,7 +35,7 @@ public class RabbitmqUtil implements InitializingBean {
          * 注意：yml需要配置 publisher-returns: true
          */
         rabbitTemplate.setMandatory(true);
-
+        //rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         /**
          * 消费者确认收到消息后，手动ack回执回调处理
          */
@@ -42,15 +44,16 @@ public class RabbitmqUtil implements InitializingBean {
         /**
          * 消息投递到队列失败回调处理
          */
-       // rabbitTemplate.setReturnCallback(returnCallb
+       // rabbitTemplate.setReturnCallback(returnCallbackService);
         /**
          * 发送消息
          */
         rabbitTemplate.convertAndSend(exchange, routingKey, msg,
                 message -> {
                     message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
-                    message.getMessageProperties().setExpiration("5000");
+                    //message.getMessageProperties().setExpiration("5000");
                     message.getMessageProperties().setContentEncoding(StandardCharsets.UTF_8.name());
+                    //message.getMessageProperties().setPriority(4);
                     return message;
                 },
                 new CorrelationData(IdUtil.fastSimpleUUID()));

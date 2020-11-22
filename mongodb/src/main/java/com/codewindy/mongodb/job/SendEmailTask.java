@@ -4,7 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.codewindy.mongodb.pojo.User;
 import com.codewindy.mongodb.service.UserService;
-import com.codewindy.mongodb.utils.SpringBeanUtils;
+import com.codewindy.common.utils.SpringBeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;

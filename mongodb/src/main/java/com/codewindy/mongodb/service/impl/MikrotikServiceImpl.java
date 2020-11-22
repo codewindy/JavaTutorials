@@ -6,6 +6,7 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.ssh.JschUtil;
 import cn.hutool.extra.ssh.Sftp;
+import com.codewindy.common.utils.RabbitmqConstant;
 import com.codewindy.mongodb.pojo.ApiResult;
 import com.codewindy.mongodb.pojo.ErrorEnum;
 import com.codewindy.mongodb.pojo.PppoeDetail;
@@ -120,7 +121,9 @@ public class MikrotikServiceImpl implements MikrotikService {
     @Override
     public ApiResult getPcapFileDetail() {
 
-        rabbitmqUtil.sendMessage("confirmTestExchange","confirmTestQueue","我是消息");
+        for (int i = 0; i < 20; i++) {
+            rabbitmqUtil.sendMessage(RabbitmqConstant.EXCHANGE_NAME,RabbitmqConstant.ROUTING_ORDER_CANCEL,"我是消息, i miss u");
+        }
         ApiConnection con = null;
         // connect to router
         try {

@@ -12,8 +12,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.codewindy.mongodb.pojo.ApiResult;
 import com.codewindy.mongodb.pojo.User;
 import com.codewindy.mongodb.service.UserService;
-import com.codewindy.mongodb.utils.ExcelUtil;
-import com.codewindy.mongodb.utils.ValidatorUtils;
+import com.codewindy.common.utils.ExcelUtil;
+import com.codewindy.common.utils.ValidatorUtils;
 import com.codewindy.mongodb.vo.UserVO;
 import com.google.api.client.util.Lists;
 import io.swagger.annotations.Api;
@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 @RestController
 @Api(value = "用户服务")

@@ -1,5 +1,5 @@
 
-package com.codewindy.mongodb.utils;
+package com.codewindy.common.utils;
 
 import lombok.Data;
 

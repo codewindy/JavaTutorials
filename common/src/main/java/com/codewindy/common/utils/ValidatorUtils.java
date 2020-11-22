@@ -1,4 +1,4 @@
-package com.codewindy.mongodb.utils;
+package com.codewindy.common.utils;
 
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;

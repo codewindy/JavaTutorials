@@ -1,4 +1,4 @@
-package com.codewindy.mongodb.utils;
+package com.codewindy.common.utils;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.map.MapUtil;

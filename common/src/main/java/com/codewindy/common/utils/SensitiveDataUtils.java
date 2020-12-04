@@ -3,6 +3,10 @@ package com.codewindy.common.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ *  https://github.com/sofastack/sofa-common-tools/releases
+ * 引入util包
+ */
 public class SensitiveDataUtils {
     private static boolean hideFlag = true;
     public static final int BANKCARDNO_DATA = 0;

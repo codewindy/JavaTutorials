@@ -26,6 +26,7 @@
 * 新增`zuul` `pinpoint``kong` 
 * 新增微信公众号开发,需要[ngrok内网穿透服务](http://ngrok.cc/download.html)
 * 在macOS下如果突然项目出现大量报错并且找不到Springboot即需要重新配置idea的gradle环境
-
+* [ideaIU-2020.3.dmg](https://download.jetbrains.8686c.com/idea/ideaIU-2020.3.dmg)
+* [ideaIU-2020.3.exe](https://download.jetbrains.8686c.com/idea/ideaIU-2020.3.exe)
 
 

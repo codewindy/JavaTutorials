@@ -33,6 +33,8 @@ public class Test {
         JSONArray jsonArray = JSON.parseArray(str);
         ArrayList<Object> list = Lists.newArrayListWithCapacity(30);
         String url="https://space.dingtalk.com/attachment/mdown?biztype=file&bizid=3880545389&objectid=";
+        // vip班 bizid= 3880545389
+        //https://space.dingtalk.com/attachment/mdown?biztype=file&bizid=3880545389&objectid=%2f%e4%bc%b0%e5%80%bc%e6%8a%80%e6%9c%af%2f%e4%b8%8a%e6%b5%b7%e6%9c%ba%e5%9c%ba%e7%9a%84%e9%80%bb%e8%be%91%e5%88%86%e6%9e%90%ef%bc%8c%e7%90%86%e8%ae%ba%e4%b8%8a65%e9%99%84%e8%bf%91%e6%af%94%e8%be%83%e5%ae%89%e5%85%a8.mp4
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = (JSONObject) jsonArray.get(i);
             // 使用 https://www.sojson.com/encodeurl.html 的encodeURIComponent 前端方法重新转义参数中的特殊符号

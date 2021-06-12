@@ -17,7 +17,8 @@
 * custom class loader
 * jvmti enctypt jar
 * git pull difference git pull --rebase 
-* threadLocal 
+* threadLocal
+* [dingtalk download](https://github.com/codewindy/JavaTutorials/blob/master/common/src/main/java/com/codewindy/common/utils/Test.java)
 * 面向切面编程时，常用的API拦截方式有Fliter，Interceptor，ControllerAdvice以及Aspect，它们的拦截顺序为 Fliter -> Interceptor -> ControllerAdvice -> Aspect -> controller。这里我们使用Aspect来实现。
  ```markdown
 spring aop就是一个同心圆，要执行的方法为圆心，最外层的order最小。从最外层按照AOP1、AOP2的顺序依次执行doAround方法，doBefore方法。然后执行method方法，最后按照AOP2、AOP1的顺序依次执行doAfter、doAfterReturn方法。也就是说对多个AOP来说，先before的，一定后after。

@@ -1,7 +1,12 @@
 buildscript {
+//    ext {
+//        springBootVersion = '2.6.4'
+//        springCloudVersion='2021.0.x'
+//    }
+
     ext {
-        springBootVersion = '2.3.5.RELEASE'
-        springCloudVersion='Hoxton.SR8'
+        set('springBootVersion', "2.6.4")
+        set('springCloudVersion', "2021.0.0")
     }
     repositories {
         maven { url 'https://maven.aliyun.com/repository/public/' }
@@ -69,6 +74,7 @@ subprojects {
         annotationProcessor "org.projectlombok:lombok:1.18.16"
 
         compile group: 'com.alibaba', name: 'fastjson', version: '1.2.74'
+        implementation 'org.springframework.boot:spring-boot-starter-batch'
         compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: '2.2.5.RELEASE'
         compile group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
         compile group: 'com.github.xiaoymin', name: 'knife4j-spring-boot-starter', version: '2.0.4'

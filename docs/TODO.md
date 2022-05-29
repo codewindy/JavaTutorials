@@ -1,10 +1,13 @@
 [Todo]尚硅谷多线程 面试题 大数据 kafka相关视频
 --
-* bigdata kafka
+* bigdata kafka mirrorMaker2
 * java multithread video
 * add common module for aes rsa encrypt method 
 * optimized code author template
-
+* TGW STGW https://cloud.tencent.com/document/product/214/530
+* COS FPS
+* select for update 乐观锁https://blog.51cto.com/javastack/4635681
+* Obsidian https://wiki.eryajf.net/pages/6ed7fe/#%E5%BA%94%E7%94%A8-2 
 [Done]springboot-jkwindy
 --
 * MongoDB入门和安装

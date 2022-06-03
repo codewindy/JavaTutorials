@@ -1,7 +1,7 @@
 package com.codewindy.mongodb.controller;
 
 import cn.hutool.core.util.IdUtil;
-import com.codewindy.mongodb.pojo.ApiResult;
+import com.codewindy.common.utils.ApiResult;
 import com.codewindy.mongodb.service.MikrotikService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,7 +12,6 @@ import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**

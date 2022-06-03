@@ -3,3 +3,5 @@ include 'mongodb'
 include 'common'
 include 'mysql'
 include 'postgres'
+include 'h2'
+

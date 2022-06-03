@@ -1,4 +1,4 @@
-package com.codewindy.mongodb.pojo;
+package com.codewindy.common.utils;
 
 
 import lombok.Getter;

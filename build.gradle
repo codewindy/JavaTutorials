@@ -5,8 +5,8 @@ buildscript {
 //    }
 
     ext {
-        set('springBootVersion', "2.6.4")
-        set('springCloudVersion', "2021.0.0")
+        set('springBootVersion', "2.7.0")
+        set('springCloudVersion', "2021.0.3")
     }
     repositories {
         maven { url 'https://maven.aliyun.com/repository/public/' }
@@ -19,7 +19,6 @@ buildscript {
 }
 
 allprojects {
-
     apply plugin: 'idea'
     apply plugin: 'java-library'
     apply plugin: 'io.spring.dependency-management'
@@ -50,6 +49,7 @@ allprojects {
         }
     }
 }
+
 subprojects {
     jar {
         baseName = 'codewindy-javatutorials.' + project.name

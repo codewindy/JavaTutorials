@@ -1,6 +1,6 @@
 package com.codewindy.mongodb.service;
 
-import com.codewindy.mongodb.pojo.ApiResult;
+import com.codewindy.common.utils.ApiResult;
 
 public interface MikrotikService {
 

@@ -24,10 +24,9 @@ import java.util.HashMap;
  * @since 1.0.0
  */
 @Slf4j
-@Component
-@Aspect
+//@Component
+//@Aspect
 public class WebLogAspect {
-
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
     public void logPointCut() {
     }
